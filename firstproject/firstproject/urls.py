@@ -16,10 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from greetings import views
-
+from calculator import views as cview
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('goodmorning/',views.GoodMorningView.as_view()),
-    path('goodafternoon',views.GoodAfternoonView.as_view())
+    path('goodafternoon',views.GoodAfternoonView.as_view()),
+    path('greetings/',views.GreetingsView.as_view()),
+    path('operations/add/',cview.AddView.as_view()),
+    path('operations/sub/',cview.SubView.as_view()),
+    path('operations/div/',cview.DivView.as_view()),
+    path('operations/mul/',cview.MulView.as_view()),
+    path('operations/cube/',cview.CubeView.as_view()),
+    path('operations/fact/', cview.FactView.as_view()),
 ]
