@@ -2,7 +2,7 @@ from django.shortcuts import render
 # Create your views here.
 
 from rest_framework.views import APIView
-from rest_framework.views import Response
+from rest_framework.response import Response
 
 class AddView(APIView):
     def post(self,request,*args,**kwargs):
@@ -51,5 +51,18 @@ class FactView(APIView):
         for i in range(1,n1+1):
             fact=fact*i
         return Response({"msg":fact})
+
+class WordCountView(APIView):
+    def post(self,request,*args,**kwargs):
+        text=request.data.get("text")
+        words=text.split(" ")
+        wc={}
+        for w in words:
+            if w in wc:
+                wc[w]+=1
+            else:
+                wc[w]=1
+        return Response(data=wc)
+
 
 

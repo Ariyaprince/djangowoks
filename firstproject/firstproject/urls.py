@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from greetings import views
 from calculator import views as cview
+from blogapi import views as bview
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +30,6 @@ urlpatterns = [
     path('operations/mul/',cview.MulView.as_view()),
     path('operations/cube/',cview.CubeView.as_view()),
     path('operations/fact/', cview.FactView.as_view()),
+    path('operations/wordcount/',cview.WordCountView.as_view()),
+    path('social/posts/',bview.PostView.as_view())
 ]
