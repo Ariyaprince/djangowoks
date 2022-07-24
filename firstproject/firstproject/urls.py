@@ -31,5 +31,6 @@ urlpatterns = [
     path('operations/cube/',cview.CubeView.as_view()),
     path('operations/fact/', cview.FactView.as_view()),
     path('operations/wordcount/',cview.WordCountView.as_view()),
-    path('social/posts/',bview.PostView.as_view())
+    path('social/posts/',bview.PostView.as_view()),
+    path('social/posts/<int:pid>',bview.PostDetailView.as_view())
 ]
