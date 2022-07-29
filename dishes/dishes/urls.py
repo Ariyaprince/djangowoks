@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from dishapi.views import DishView,DishDetailsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('myg/products/',DishView.as_view()),
+    path('myg/products/<int:id>',DishDetailsView.as_view()),
 ]
