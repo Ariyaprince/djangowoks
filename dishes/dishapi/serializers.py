@@ -7,4 +7,9 @@ class DishSerializer(serializers.Serializer):
     category=serializers.CharField()
     rating=serializers.FloatField()
 
+    def validate(self,data):
+        price=data.get("price")
+        if price<0:
+            raise serializers.ValidationError("invalid price")
+        return data
 
