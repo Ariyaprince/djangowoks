@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from dishapi.views import DishView,DishDetailsView
+from dishapi.views import DishView,DishDetailsView,DishModelView,DishDetailModelView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('myg/products/',DishView.as_view()),
-    path('myg/products/<int:id>',DishDetailsView.as_view()),
+    path('dishes/',DishView.as_view()),
+    path('dishes/<int:id>',DishDetailsView.as_view()),
+    path('api/v2/dishes/',DishModelView.as_view()),
+    path('api/v2/dishes/<int:id>',DishDetailModelView.as_view())
 ]
