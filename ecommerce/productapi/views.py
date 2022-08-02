@@ -7,6 +7,7 @@ from productapi.models import Product
 from productapi.serializers import ProductSerializer
 from rest_framework import status
 from productapi.serializers import ProductModelSerializer
+from rest_framework.viewsets import ViewSet
 
 class ProductView(APIView):
     def get(self,*args,**kwargs):
@@ -95,6 +96,39 @@ class ProductDetailsModelView(APIView):
         instance=Product.objects.get(id=id)
         instance.delete()
         return Response({"msg":"deleted"},status=status.HTTP_204_NO_CONTENT)
+
+class ProductSetModelView(ViewSet):
+    def list(self,request,*args,**kwargs):
+        qs = Product.objects.all()
+        serializer = ProductModelSerializer(qs, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+    def create(self,request,*args,**kwargs):
+        serializer = ProductModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def retrieve(self,request,*args,**kwargs):
+        id = kwargs.get("pk")
+        qs = Product.objects.get(id=id)
+        serializer = ProductModelSerializer(qs)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+    def update(self,request,*args,**kwargs):
+        id = kwargs.get("pk")
+        object = Product.objects.get(id=id)
+        serializer = ProductModelSerializer(data=request.data, instance=object)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def destroy(self,request,*args,**kwargs):
+        id = kwargs.get("pk")
+        instance = Product.objects.get(id=id)
+        instance.delete()
+        return Response({"msg": "deleted"}, status=status.HTTP_204_NO_CONTENT)
+
 
 
 

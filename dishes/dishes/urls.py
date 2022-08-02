@@ -15,12 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from dishapi.views import DishView,DishDetailsView,DishModelView,DishDetailModelView
+from dishapi.views import DishView,DishDetailsView,DishModelView,DishDetailModelView,DishSetModelView
+from rest_framework.routers import DefaultRouter
+router=DefaultRouter()
+router.register('api/v3/dishes',DishSetModelView,basename="dishes")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('dishes/',DishView.as_view()),
     path('dishes/<int:id>',DishDetailsView.as_view()),
     path('api/v2/dishes/',DishModelView.as_view()),
-    path('api/v2/dishes/<int:id>',DishDetailModelView.as_view())
-]
+    path('api/v2/dishes/<int:id>',DishDetailModelView.as_view()),
+]+router.urls
