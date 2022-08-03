@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from productapi.models import Product
 from productapi.serializers import ProductSerializer
 from rest_framework import status
-from productapi.serializers import ProductModelSerializer
-from rest_framework.viewsets import ViewSet
+from productapi.serializers import ProductModelSerializer,UserSerializer
+from rest_framework.viewsets import ViewSet,ModelViewSet
 
 class ProductView(APIView):
     def get(self,*args,**kwargs):
@@ -128,6 +128,20 @@ class ProductSetModelView(ViewSet):
         instance = Product.objects.get(id=id)
         instance.delete()
         return Response({"msg": "deleted"}, status=status.HTTP_204_NO_CONTENT)
+
+class ProductModelViewsetViews(ModelViewSet):
+    serializer_class = ProductModelSerializer
+    queryset = Product.objects.all()
+
+
+from django.contrib.auth.models import User
+
+class UserModelViewsetViews(ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+
+
 
 
 

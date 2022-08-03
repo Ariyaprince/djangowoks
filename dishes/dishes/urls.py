@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from dishapi.views import DishView,DishDetailsView,DishModelView,DishDetailModelView,DishSetModelView
+from dishapi.views import DishView,DishDetailsView,DishModelView,DishDetailModelView,DishSetModelView,DishesModelViwsetViews
 from rest_framework.routers import DefaultRouter
 router=DefaultRouter()
 router.register('api/v3/dishes',DishSetModelView,basename="dishes")
+router.register('api/v4/dishes',DishesModelViwsetViews,basename="mdishes")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

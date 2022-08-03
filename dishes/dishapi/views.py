@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from dishapi.models import Dishes
 from dishapi.serializers import DishSerializer,DishModelSerializer
 from rest_framework import status
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ViewSet,ModelViewSet
 
 class DishView(APIView):
     def get(self,request,*args,**kwargs):
@@ -123,6 +123,9 @@ class DishSetModelView(ViewSet):
         instance.delete()
         return Response({"msg":"deleted"},status=status.HTTP_204_NO_CONTENT)
 
+class DishesModelViwsetViews(ModelViewSet):
+    serializer_class = DishModelSerializer
+    queryset = Dishes.objects.all()
 
 
 
