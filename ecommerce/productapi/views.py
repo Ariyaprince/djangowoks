@@ -8,6 +8,7 @@ from productapi.serializers import ProductSerializer
 from rest_framework import status
 from productapi.serializers import ProductModelSerializer,UserSerializer
 from rest_framework.viewsets import ViewSet,ModelViewSet
+from rest_framework import authentication,permissions
 
 class ProductView(APIView):
     def get(self,*args,**kwargs):
@@ -132,13 +133,16 @@ class ProductSetModelView(ViewSet):
 class ProductModelViewsetViews(ModelViewSet):
     serializer_class = ProductModelSerializer
     queryset = Product.objects.all()
-
+    authentication_classes = [authentication.BasicAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
 from django.contrib.auth.models import User
 
 class UserModelViewsetViews(ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+
 
 
 

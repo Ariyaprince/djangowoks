@@ -4,9 +4,10 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from dishapi.models import Dishes
-from dishapi.serializers import DishSerializer,DishModelSerializer
+from dishapi.serializers import DishSerializer,DishModelSerializer,UserSerializer
 from rest_framework import status
 from rest_framework.viewsets import ViewSet,ModelViewSet
+from rest_framework import authentication,permissions
 
 class DishView(APIView):
     def get(self,request,*args,**kwargs):
@@ -126,8 +127,15 @@ class DishSetModelView(ViewSet):
 class DishesModelViwsetViews(ModelViewSet):
     serializer_class = DishModelSerializer
     queryset = Dishes.objects.all()
+    authentication_classes = [authentication.BasicAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
 
+from django.contrib.auth.models import User
+
+class UserModelViewsetView(ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
 
 
 

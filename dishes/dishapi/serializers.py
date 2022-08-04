@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from dishapi.models import Dishes
+from django.contrib.auth.models import User
 
 class DishSerializer(serializers.Serializer):
     id=serializers.CharField(read_only=True)
@@ -19,4 +20,16 @@ class DishModelSerializer(serializers.ModelSerializer):
         model=Dishes
         fields='__all__'
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        fields=[
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'password'
+        ]
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)
 
