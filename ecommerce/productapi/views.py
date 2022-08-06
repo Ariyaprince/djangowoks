@@ -133,7 +133,8 @@ class ProductSetModelView(ViewSet):
 class ProductModelViewsetViews(ModelViewSet):
     serializer_class = ProductModelSerializer
     queryset = Product.objects.all()
-    authentication_classes = [authentication.BasicAuthentication]
+    # authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
 from django.contrib.auth.models import User

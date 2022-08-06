@@ -127,7 +127,8 @@ class DishSetModelView(ViewSet):
 class DishesModelViwsetViews(ModelViewSet):
     serializer_class = DishModelSerializer
     queryset = Dishes.objects.all()
-    authentication_classes = [authentication.BasicAuthentication]
+    # authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
 
