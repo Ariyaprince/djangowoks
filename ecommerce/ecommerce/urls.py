@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from products import views
-from productapi.views import ProductView,ProductDetailView,ProductDetailsModelView,ProductModelView,ProductSetModelView,ProductModelViewsetViews,UserModelViewsetViews
+from productapi.views import ProductView,ProductDetailView,ProductDetailsModelView,ProductModelView,ProductSetModelView,ProductModelViewsetViews,UserModelViewsetViews,CartView
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 
@@ -24,6 +24,7 @@ router=DefaultRouter()
 router.register('api/v3/myg/products',ProductSetModelView,basename="products")
 router.register('api/v4/myg/products',ProductModelViewsetViews,basename="mproducts")
 router.register('api/v5/authenticate',UserModelViewsetViews,basename="authenticate")
+router.register('api/user/carts',CartView,basename="carts")
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('product/list',views.ProductView.as_view()),

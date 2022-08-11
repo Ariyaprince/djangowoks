@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from productapi.models import Product
+from productapi.models import Product,Review,Carts
 from django.contrib.auth.models import User
 
 
@@ -17,9 +17,12 @@ class ProductSerializer(serializers.Serializer):
         return data
 
 class ProductModelSerializer(serializers.ModelSerializer):
+    review_count=serializers.CharField(read_only=True)
+    avg_rating=serializers.CharField(read_only=True)
+    id=serializers.CharField(read_only=True)
     class Meta:
         model=Product
-        fields='__all__'
+        fields=["id","name","category","price","avg_rating","review_count"]
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,3 +37,28 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
+
+class ReviewSerializer(serializers.ModelSerializer):
+    author=serializers.CharField(read_only=True)
+    product=serializers.CharField(read_only=True)
+    class Meta:
+        model=Review
+        fields='__all__'
+
+    def create(self, validated_data):
+        author=self.context.get("author")
+        product=self.context.get("product")
+        return Review.objects.create(**validated_data,author=author,product=product)
+
+class CartSerializer(serializers.ModelSerializer):
+    user=serializers.CharField(read_only=True)
+    product=serializers.CharField(read_only=True)
+    date=serializers.DateField(read_only=True)
+    status=serializers.CharField(read_only=True)
+    class Meta:
+        model=Carts
+        fields='__all__'
+    def create(self, validated_data):
+        user=self.context.get("user")
+        product=self.context.get("product")
+        return Carts.objects.create(**validated_data,user=user,product=product)

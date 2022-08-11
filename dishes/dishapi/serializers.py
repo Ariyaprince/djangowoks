@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from dishapi.models import Dishes
+from dishapi.models import Dishes,Review
 from django.contrib.auth.models import User
 
 class DishSerializer(serializers.Serializer):
@@ -32,4 +32,10 @@ class UserSerializer(serializers.ModelSerializer):
         ]
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Review
+        fields='__all__'
+
 

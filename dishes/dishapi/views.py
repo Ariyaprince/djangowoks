@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from dishapi.models import Dishes
-from dishapi.serializers import DishSerializer,DishModelSerializer,UserSerializer
+from dishapi.serializers import DishSerializer,DishModelSerializer,UserSerializer,ReviewSerializer
 from rest_framework import status
 from rest_framework.viewsets import ViewSet,ModelViewSet
 from rest_framework import authentication,permissions
@@ -131,6 +131,12 @@ class DishesModelViwsetViews(ModelViewSet):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_view(self,*args,**kwargs):
+        id=kwargs.get("pk")
+        dish=Dishes.objects.get(id=id)
+        review=dish.review_set.all()
+        serializer=ReviewSerializer(review,many=True)
+        return Response(data=serializer.data)
 
 from django.contrib.auth.models import User
 

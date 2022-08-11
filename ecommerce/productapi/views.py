@@ -3,12 +3,13 @@ from django.shortcuts import render
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from productapi.models import Product
+from productapi.models import Product,Review,Carts
 from productapi.serializers import ProductSerializer
 from rest_framework import status
-from productapi.serializers import ProductModelSerializer,UserSerializer
+from productapi.serializers import ProductModelSerializer,UserSerializer,ReviewSerializer,CartSerializer
 from rest_framework.viewsets import ViewSet,ModelViewSet
 from rest_framework import authentication,permissions
+from rest_framework.decorators import action
 
 class ProductView(APIView):
     def get(self,*args,**kwargs):
@@ -55,7 +56,6 @@ class ProductDetailView(APIView):
         serializer=ProductSerializer(instance)
         instance.delete()
         return Response({"msg":"deleted"},status=status.HTTP_400_BAD_REQUEST)
-
 
 class ProductModelView(APIView):
     def get(self,request,*args,**kwargs):
@@ -136,6 +136,47 @@ class ProductModelViewsetViews(ModelViewSet):
     # authentication_classes = [authentication.BasicAuthentication]
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
+    @action(methods=["get"],detail=True)
+    def get_reviews(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        product=Product.objects.get(id=id)
+        review=product.review_set.all()
+        serializer=ReviewSerializer(review,many=True)
+        return Response(data=serializer.data)
+    # @action(methods=["post"],detail=True)
+    # def post_review(self,request,*args,**kwargs):
+    #     id = kwargs.get("pk")
+    #     # author=request.user
+    #     # review=request.data.get("review")
+    #     # rating=request.data.get("rating")
+    #     # qs=Review.objects.create(product=product,author=author,review=review,rating=rating)
+    #     # serilaizer=ReviewSerializer(qs)
+    #     # return Response(data=serilaizer.data)
+
+    @action(methods=["post"], detail=True)
+    def post_review(self,request,*args,**kwargs):
+        id = kwargs.get("pk")
+        product = Product.objects.get(id=id)
+        author=request.user
+        serializer=ReviewSerializer(data=request.data,context={"author":author,"product":product})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data)
+        else:
+            return Response(data=serializer.errors)
+
+    @action(methods=["post"], detail=True)
+    def add_to_cart(self,request,*args,**kwargs):
+        id = kwargs.get("pk")
+        product = Product.objects.get(id=id)
+        user = request.user
+        serializer = CartSerializer(data=request.data, context={"user": user, "product": product})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data)
+        else:
+            return Response(data=serializer.errors)
+
 
 from django.contrib.auth.models import User
 
@@ -143,6 +184,18 @@ class UserModelViewsetViews(ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
+class CartView(ModelViewSet):
+    serializer_class = CartSerializer
+    queryset = Carts.objects.all()
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        qs=Carts.objects.filter(user=request.user)
+        serializer=CartSerializer(qs,many=True)
+        return Response(data=serializer.data)
+    def create(self, request, *args, **kwargs):
+        return Response(data={"msg":"no access"})
 
 
 
