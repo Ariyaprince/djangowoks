@@ -11,6 +11,13 @@ class Dishes(models.Model):
 
     def __str__(self):
         return self.name
+    def avg_rating(self):
+        all_reviews=self.review_set.all()
+        if all_reviews:
+            total=sum([r.rating for r in all_reviews])
+            return total/len(all_reviews)
+        else:
+            return 0
 
 class Review(models.Model):
     author=models.ForeignKey(User,on_delete=models.CASCADE)

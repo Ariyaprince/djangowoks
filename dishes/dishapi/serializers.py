@@ -34,8 +34,14 @@ class UserSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validated_data)
 
 class ReviewSerializer(serializers.ModelSerializer):
+    author=serializers.CharField(read_only=True)
+    dish=serializers.CharField(read_only=True)
     class Meta:
         model=Review
         fields='__all__'
 
+    def create(self, validated_data):
+        author=self.context.get("author")
+        dish=self.context.get("dish")
+        return Review.objects.create(**validated_data,author=author,dish=dish)
 

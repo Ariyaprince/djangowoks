@@ -41,16 +41,16 @@ class Carts(models.Model):
     status=models.CharField(max_length=12,choices=options,default="in-cart")
 
 
-class Orders(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
-    product=models.ForeignKey(Product,on_delete=models.CASCADE)
-    date=models.DateField(auto_now_add=True,null=True)
-    options=(
-        ("order_placed","order_placed"),
-        ("ready_to_ship","ready_to_ship"),
-        ("intransit","intransit"))
-    status=models.CharField(max_length=12,choices=options,default="order_placed")
-    edd=date.today()+timedelta(days=5)
-    expected_delivery_date=models.DateField(null=True,default=edd)
+# class Orders(models.Model):
+#     user=models.ForeignKey(User,on_delete=models.CASCADE)
+#     product=models.ForeignKey(Product,on_delete=models.CASCADE)
+#     date=models.DateField(auto_now_add=True,null=True)
+#     options=(
+#         ("order_placed","order_placed"),
+#         ("ready_to_ship","ready_to_ship"),
+#         ("intransit","intransit"))
+#     status=models.CharField(max_length=12,choices=options,default="order_placed")
+#     edd=date.today()+timedelta(days=5)
+#     expected_delivery_date=models.DateField(null=True,default=edd)
 
 

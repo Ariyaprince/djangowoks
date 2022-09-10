@@ -19,6 +19,7 @@ from products import views
 from productapi.views import ProductView,ProductDetailView,ProductDetailsModelView,ProductModelView,ProductSetModelView,ProductModelViewsetViews,UserModelViewsetViews,CartView
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 
 router=DefaultRouter()
 router.register('api/v3/myg/products',ProductSetModelView,basename="products")
@@ -32,5 +33,7 @@ urlpatterns = [
     path('myg/products/<int:id>',ProductDetailView.as_view()),
     path('api/v2/myg/products/',ProductModelView.as_view()),
     path('api/v2/myg/products/<int:id>',ProductDetailsModelView.as_view()),
-    path('api/v4/token',obtain_auth_token),
+    # path('api/v4/token',obtain_auth_token),
+    path('api/v4/token',TokenObtainPairView.as_view()),
+    path('api/v4/token/refresh',TokenRefreshView.as_view()),
 ]+router.urls

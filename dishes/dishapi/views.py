@@ -3,11 +3,12 @@ from django.shortcuts import render
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from dishapi.models import Dishes
+from dishapi.models import Dishes,Review
 from dishapi.serializers import DishSerializer,DishModelSerializer,UserSerializer,ReviewSerializer
 from rest_framework import status
 from rest_framework.viewsets import ViewSet,ModelViewSet
 from rest_framework import authentication,permissions
+from rest_framework.decorators import action
 
 class DishView(APIView):
     def get(self,request,*args,**kwargs):
@@ -131,12 +132,32 @@ class DishesModelViwsetViews(ModelViewSet):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_view(self,*args,**kwargs):
+    @action(["get"],detail=True)
+    def get_review(self,*args,**kwargs):
         id=kwargs.get("pk")
         dish=Dishes.objects.get(id=id)
         review=dish.review_set.all()
         serializer=ReviewSerializer(review,many=True)
         return Response(data=serializer.data)
+
+    @action(["post"],detail=True)
+    def post_review(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        dish=Dishes.objects.get(id=id)
+        author=request.user
+        # review=request.data.get("review")
+        # rating=request.data.get("rating")
+        # qs=Review.objects.create(author=author,dish=dish,review=review,rating=rating)
+        # serializer=ReviewSerializer(qs)
+        # return Response(data=serializer.data)
+
+        serializer=ReviewSerializer(data=request.data,context={"author":author,"dish":dish})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data)
+        else:
+            return Response(data=serializer.errors)
+
 
 from django.contrib.auth.models import User
 
