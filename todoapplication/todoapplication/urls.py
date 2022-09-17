@@ -1,4 +1,4 @@
-"""socialapplication URL Configuration
+"""todoapplication URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
@@ -15,17 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from socialapi import views
-from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
-router=DefaultRouter()
-router.register("api/v1/accounts/register",views.UserRegistrationView,basename="registration")
-router.register('api/v1/users/profile',views.UserProfileView,basename="profile")
-router.register('api/v1/users/post',views.PostView,basename="posts")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/token',TokenObtainPairView.as_view()),
-    path('api/v1/token/refresh',TokenRefreshView.as_view()),
-    path('social/',include("social.urls"))
-]+router.urls
+    path("todoapp/",include("todoapp.urls"))
+]
